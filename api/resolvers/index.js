@@ -1,11 +1,12 @@
 module.exports = {
   Query: {
-    stock: code => {
+    stock: async (root, args, { dataSources }) => {
+      const stock = await dataSources.stockAPI.getStockByCode(args.code)
       return {
-        code: 'JNJ',
-        price: 5.25,
-        priceYDA: 5.00,
-        todayVariation: 5
+        code: args.code,
+        price: stock.regularMarketPrice,
+        priceYDA: stock.previousClose,
+        todayVariation: stock.variation
       }
     }
   }
